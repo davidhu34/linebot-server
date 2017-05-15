@@ -1,7 +1,7 @@
 const linebot = require('linebot')
 const conversation = require('./conversation')
 
-const { CHANNEL_ID, CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN } = require('./configs').linebot
+const { WEBHOOK, CHANNEL_ID, CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN } = require('./configs').linebot
 
 const bot = linebot({
 	channelId: CHANNEL_ID,
@@ -19,4 +19,6 @@ bot.on('message', event => {
 		})
 
 })
-module.exports = bot
+module.exports = app => {
+	app.post(WEBHOOK, bot.parser())	
+}
