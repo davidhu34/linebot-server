@@ -1,0 +1,138 @@
+[
+    {
+        "id": "7cc0e908.b847c8",
+        "type": "ibmiot in",
+        "z": "daa52f43.2dec2",
+        "authentication": "boundService",
+        "apiKey": "",
+        "inputType": "evt",
+        "deviceId": "linebot-server",
+        "applicationId": "",
+        "deviceType": "robot",
+        "eventType": "",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT",
+        "service": "registered",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": "",
+        "allEvents": true,
+        "allCommands": "",
+        "allFormats": true,
+        "qos": 0,
+        "x": 55.9999942779541,
+        "y": 75.40003204345703,
+        "wires": [
+            [
+                "7eeeaa99.05f154",
+                "37a463f7.d08fcc"
+            ]
+        ]
+    },
+    {
+        "id": "388576db.410e1a",
+        "type": "watson-conversation-v1",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "workspaceid": "89a67e22-42d8-4f4c-92e5-1481bb641150",
+        "multiuser": true,
+        "context": true,
+        "x": 368.49999618530273,
+        "y": 135.4000415802002,
+        "wires": [
+            [
+                "6dec68d8.c15708",
+                "d7fdcdf6.cc248"
+            ]
+        ]
+    },
+    {
+        "id": "e99844e2.8f7d08",
+        "type": "ibmiot out",
+        "z": "daa52f43.2dec2",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "linebot-server",
+        "deviceType": "robot",
+        "eventCommandType": "reply",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 385.5000457763672,
+        "y": 193.80002975463867,
+        "wires": []
+    },
+    {
+        "id": "7eeeaa99.05f154",
+        "type": "function",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "func": "msg.message = msg.payload;\nif (msg.message.type === 'text') {\n    msg.payload = msg.message.text;\n    msg.user = msg.message.text;\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 227.50001907348633,
+        "y": 135.600004196167,
+        "wires": [
+            [
+                "388576db.410e1a"
+            ]
+        ]
+    },
+    {
+        "id": "6dec68d8.c15708",
+        "type": "function",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "func": "msg.payload = {\n    message: msg.message,\n    reply: {\n        text: msg.payload.output.text[0]\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 228.50000762939453,
+        "y": 193.6000576019287,
+        "wires": [
+            [
+                "e99844e2.8f7d08",
+                "2ff58b9c.d1c7f4"
+            ]
+        ]
+    },
+    {
+        "id": "37a463f7.d08fcc",
+        "type": "debug",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 193.5000286102295,
+        "y": 75.40002632141113,
+        "wires": []
+    },
+    {
+        "id": "2ff58b9c.d1c7f4",
+        "type": "debug",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 398.5001106262207,
+        "y": 253.40002250671387,
+        "wires": []
+    },
+    {
+        "id": "d7fdcdf6.cc248",
+        "type": "debug",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 564.5000801086426,
+        "y": 135.80004024505615,
+        "wires": []
+    }
+]

@@ -9,6 +9,7 @@ const bot = linebot({
     channelAccessToken: CHANNEL_ACCESS_TOKEN
 })
 
+// event -> webhook event object
 const echoMsg = event => {
 	// one-time replyToken usage
 	console.log('echo message:', event.message)
@@ -20,29 +21,33 @@ const echoMsg = event => {
 		})
 }
 
-// event -> webhook event object
 // profile -> user profile object
 const replyMsg = (message, profile) => {
 	console.log('reply message:', message)
 	let payload = message
 	payload.user = profile.userId
-	converstation.publish('iot-2/evt/text/fmt/json', JSON.stringify(payload))
+	conversation.publish('iot-2/evt/text/fmt/json', JSON.stringify(payload))
 }
 
+// payload from Node-RED
 conversation.on('message', (topic, payload) => {
 	const data = JSON.parse(payload)
 	const userId = data.message.user
 	const reply = profiles[userId].displayName + ', ' + data.reply.text
-	console.log('to reply:', reply)
-	bot.push( userId, reply )
+	console.log('to reply:',userId, reply)
+	bot.push( userId, {
+		type: 'text',
+		text: reply
+	})
 })
 
-
+// user profile store
 let profiles = {}
+
 bot.on('message', event => {
 
 	// echo
-	echoMsg(event)
+	//echoMsg(event)
 	
 	// reply via push
 	const userId = event.source.userId
@@ -63,4 +68,5 @@ bot.on('message', event => {
 
 })
 
+// create bot and apply express app middleware
 module.exports = app => app.post(WEBHOOK, bot.parser())	
