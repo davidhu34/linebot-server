@@ -1,16 +1,10 @@
 const express = require('express')
 const linebot = require('./linebot')
 
-const app = express();
+const app = express()
 const bot = linebot(app)
 
 app.listen(process.env.PORT || 8080);
-
-
-
-
-
-
 
 //line-messaging
 /*
@@ -23,6 +17,7 @@ const server = linebot(app)
 server.listen(process.env.PORT || 3000);
 */
 
+//debugging
 /*
 app.use(function(req, res, next) {
 	console.log(req.body)

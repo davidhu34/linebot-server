@@ -15,10 +15,10 @@ const iot_client = mqtt.connect('mqtt://'+organizationId+'.messaging.internetoft
 iot_client.on('connect', () => {
 	console.log('Client connected to IBM IoT Cloud.')
 
-	iot_client.subscribe('iot-2/cmd/+/fmt/+', (err, granted) => {
+	iot_client.subscribe('iot-2/cmd/reply/fmt/json', (err, granted) => {
 		console.log('subscribed command, granted: '+ JSON.stringify(granted))
 	})
-	iot_client.publish('iot-2/evt/temp/fmt/json', '{"d":{"temp": "connectd" }}')
+	iot_client.publish('iot-2/evt/init/fmt/string', '{"text": "connected"}')
 })
 
 module.exports = iot_client
