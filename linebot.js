@@ -36,8 +36,8 @@ conversation.on('message', (topic, payload) => {
 	const reply = profiles[userId].displayName + ', ' + data.reply.text
 	console.log('to reply:',userId, reply)
 	bot.push( userId, {
-		type: 'text',
-		text: reply
+		"type": 'text',
+		"text": reply
 	})
 })
 
