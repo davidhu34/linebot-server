@@ -9,7 +9,7 @@
         "deviceId": "linebot-server",
         "applicationId": "",
         "deviceType": "robot",
-        "eventType": "",
+        "eventType": "text",
         "commandType": "",
         "format": "json",
         "name": "IBM IoT",
@@ -17,12 +17,12 @@
         "allDevices": "",
         "allApplications": "",
         "allDeviceTypes": "",
-        "allEvents": true,
+        "allEvents": false,
         "allCommands": "",
         "allFormats": true,
         "qos": 0,
-        "x": 55.9999942779541,
-        "y": 75.40003204345703,
+        "x": 95.9999942779541,
+        "y": 44.40003204345703,
         "wires": [
             [
                 "7eeeaa99.05f154",
@@ -38,8 +38,8 @@
         "workspaceid": "89a67e22-42d8-4f4c-92e5-1481bb641150",
         "multiuser": true,
         "context": true,
-        "x": 368.49999618530273,
-        "y": 135.4000415802002,
+        "x": 267.5000114440918,
+        "y": 104.40003967285156,
         "wires": [
             [
                 "6dec68d8.c15708",
@@ -62,8 +62,8 @@
         "qos": 0,
         "name": "IBM IoT",
         "service": "registered",
-        "x": 385.5000457763672,
-        "y": 193.80002975463867,
+        "x": 442.5000457763672,
+        "y": 216.80005550384521,
         "wires": []
     },
     {
@@ -71,11 +71,11 @@
         "type": "function",
         "z": "daa52f43.2dec2",
         "name": "",
-        "func": "msg.message = msg.payload;\nif (msg.message.type === 'text') {\n    msg.payload = msg.message.text;\n    msg.user = msg.message.text;\n    return msg;\n}\n",
+        "func": "var m = msg.payload;\nif (m.type === 'text') {\n    node.warn(m.text);\n    msg.payload = m.text;\n    msg.user = m.user;\n    msg.message = m;\n    return msg;\n}\n",
         "outputs": 1,
         "noerr": 0,
-        "x": 227.50001907348633,
-        "y": 135.600004196167,
+        "x": 113.50003051757812,
+        "y": 104.60000896453857,
         "wires": [
             [
                 "388576db.410e1a"
@@ -87,15 +87,15 @@
         "type": "function",
         "z": "daa52f43.2dec2",
         "name": "",
-        "func": "msg.payload = {\n    message: msg.message,\n    reply: {\n        text: msg.payload.output.text[0]\n    }\n}\nreturn msg;",
+        "func": "var output =  msg.payload.output.text[0];\nnode.warn(output);\nmsg.payload = {\n    message: msg.message,\n    reply: {\n        text: output\n    }\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 228.50000762939453,
-        "y": 193.6000576019287,
+        "x": 260.49999618530273,
+        "y": 161.6000518798828,
         "wires": [
             [
                 "e99844e2.8f7d08",
-                "2ff58b9c.d1c7f4"
+                "7f126c10.8667e4"
             ]
         ]
     },
@@ -107,20 +107,8 @@
         "active": true,
         "console": "false",
         "complete": "true",
-        "x": 193.5000286102295,
-        "y": 75.40002632141113,
-        "wires": []
-    },
-    {
-        "id": "2ff58b9c.d1c7f4",
-        "type": "debug",
-        "z": "daa52f43.2dec2",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "true",
-        "x": 398.5001106262207,
-        "y": 253.40002250671387,
+        "x": 247.50003051757812,
+        "y": 44.400028228759766,
         "wires": []
     },
     {
@@ -131,8 +119,150 @@
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 564.5000801086426,
-        "y": 135.80004024505615,
+        "x": 453.5000534057617,
+        "y": 104.80004596710205,
+        "wires": []
+    },
+    {
+        "id": "81128471.0ec218",
+        "type": "weather_insights",
+        "z": "daa52f43.2dec2",
+        "name": "10-day forecasts",
+        "host": "",
+        "service": "/forecast/daily/10day.json",
+        "geocode": "0,0",
+        "units": "m",
+        "language": "zh-TW",
+        "x": 332.2727508544922,
+        "y": 294.90912437438965,
+        "wires": [
+            [
+                "c9c0cd48.f2bea"
+            ]
+        ]
+    },
+    {
+        "id": "c9c0cd48.f2bea",
+        "type": "function",
+        "z": "daa52f43.2dec2",
+        "name": "get tomorrow",
+        "func": "msg.payload = msg.forecasts[1];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 501.3636474609375,
+        "y": 295.09092712402344,
+        "wires": [
+            [
+                "16711f1c.417ac1"
+            ]
+        ]
+    },
+    {
+        "id": "c5a0da7e.02c6f8",
+        "type": "weather_insights",
+        "z": "daa52f43.2dec2",
+        "name": "current observations",
+        "host": "",
+        "service": "/observations.json",
+        "geocode": "0,0",
+        "units": "m",
+        "language": "zh-TW",
+        "x": 349.8182067871094,
+        "y": 333.7272644042969,
+        "wires": [
+            [
+                "b4ae6611.dcf3c8"
+            ]
+        ]
+    },
+    {
+        "id": "b4ae6611.dcf3c8",
+        "type": "function",
+        "z": "daa52f43.2dec2",
+        "name": "observation",
+        "func": "msg.payload = msg.observation;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 535.1817855834961,
+        "y": 335.0909128189087,
+        "wires": [
+            [
+                "bf7cdef4.8bca7"
+            ]
+        ]
+    },
+    {
+        "id": "bf7cdef4.8bca7",
+        "type": "debug",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 695.8181991577148,
+        "y": 335.27274894714355,
+        "wires": []
+    },
+    {
+        "id": "f867d143.0dec5",
+        "type": "inject",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "topic": "",
+        "payload": "25.033493,121.564101",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 131.90911865234375,
+        "y": 333.2726993560791,
+        "wires": [
+            [
+                "c5a0da7e.02c6f8"
+            ]
+        ]
+    },
+    {
+        "id": "da1e4197.5c0a6",
+        "type": "inject",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "topic": "",
+        "payload": "25.033493,121.564101",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 132.3636474609375,
+        "y": 295.2727241516113,
+        "wires": [
+            [
+                "81128471.0ec218"
+            ]
+        ]
+    },
+    {
+        "id": "16711f1c.417ac1",
+        "type": "debug",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 662.2726879119873,
+        "y": 294.9091033935547,
+        "wires": []
+    },
+    {
+        "id": "7f126c10.8667e4",
+        "type": "debug",
+        "z": "daa52f43.2dec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 432.4999694824219,
+        "y": 162.20000648498535,
         "wires": []
     }
 ]
