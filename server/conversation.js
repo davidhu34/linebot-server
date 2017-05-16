@@ -2,7 +2,7 @@ const mqtt = require('mqtt')
 
 const {
 	type, organizationId, deviceType, deviceId, username, password 
-} = require('./configs.js').mqtt
+} = require('../configs.js').mqtt
 
 const clientId = [type, organizationId, deviceType, deviceId].join(':')
 const iot_client = mqtt.connect('mqtt://'+organizationId+'.messaging.internetofthings.ibmcloud.com:1883', {

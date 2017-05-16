@@ -2,7 +2,7 @@ const LINEBot = require('line-messaging')
 const http = require('http')
 
 const conversation = require('./conversation')
-const { CHANNEL_ID, CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN, WEBHOOK } = require('./configs').linebot
+const { CHANNEL_ID, CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN, WEBHOOK } = require('../configs').linebot
 
 const { MESSAGE } = LINEBot.Events
 

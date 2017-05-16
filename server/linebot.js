@@ -1,47 +1,18 @@
-const express = require('express')
 const linebot = require('linebot')
-const mqtt = require('mqtt')
+const conversation = require('./conversation')
 
-// configurations
-const configs = require('./configs')
-const {	WEBHOOK, CHANNEL_ID, CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN } = configs.linebot
-const {	type, organizationId, deviceType, deviceId, username, password } = configs.mqtt
+const { WEBHOOK, CHANNEL_ID, CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN } = require('../configs').linebot
 
-
-const app = express()
-
-
-// MQTT connection to IBM Bluemix IoT Platform
-const clientId = [type, organizationId, deviceType, deviceId].join(':')
-const iot = mqtt.connect('mqtt://'+organizationId+'.messaging.internetofthings.ibmcloud.com:1883', {
-	"clientId" : clientId,
-	"keepalive" : 30,
-	"username" : username,
-	"password" : password
-})
-iot.on('connect', () => {
-	console.log('Client connected to IBM IoT Cloud.')
-
-	iot.subscribe('iot-2/cmd/+/fmt/json', (err, granted) => {
-		console.log('subscribed command, granted: '+ JSON.stringify(granted))
-	})
-	iot.publish('iot-2/evt/init/fmt/string', JSON.stringify({text: 'connected'}))
-})
-
-
-// bot functions
 const bot = linebot({
 	channelId: CHANNEL_ID,
 	channelSecret: CHANNEL_SECRET,
     channelAccessToken: CHANNEL_ACCESS_TOKEN
 })
 
-// echo function
+// event -> webhook event object
 const echoMsg = event => {
-	// event -> webhook event object
 	// one-time replyToken usage
 	console.log('echo message:', event.message)
-
 	event.reply(event.message.text)
 		.then( data => {
 			console.log('reply success')
@@ -49,21 +20,20 @@ const echoMsg = event => {
 			console.log('reply err')
 		})
 }
-// reply function
-const replyMsg = (message, profile) => {
-	// profile -> user profile object
-	console.log('reply message:', message)
 
+// profile -> user profile object
+const replyMsg = (message, profile) => {
+	console.log('reply message:', message)
 	let payload = message
 	payload.user = profile.userId
-	iot.publish('iot-2/evt/text/fmt/json', JSON.stringify(payload))
+	conversation.publish('iot-2/evt/text/fmt/json', JSON.stringify(payload))
 }
+
 // payload from Node-RED
-iot.on('message', (topic, payload) => {
+conversation.on('message', (topic, payload) => {
 	const data = JSON.parse(payload)
 	const userId = data.message.user
 	const reply = profiles[userId].displayName + ', ' + data.reply.text
-
 	console.log('to reply:',userId, reply)
 	bot.push( userId, {
 		"type": 'text',
@@ -73,6 +43,7 @@ iot.on('message', (topic, payload) => {
 
 // user profile store
 let profiles = {}
+
 bot.on('message', event => {
 
 	// echo
@@ -98,7 +69,4 @@ bot.on('message', event => {
 })
 
 // create bot and apply express app middleware
-app.post(WEBHOOK, bot.parser())	
-
-
-app.listen(process.env.PORT || 8080);
+module.exports = app => app.post(WEBHOOK, bot.parser())	
