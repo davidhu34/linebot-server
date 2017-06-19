@@ -24,10 +24,7 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "line-messaging": "^1.1.8",
     "linebot": "^1.3.0",
-    "mqtt": "^2.7.1",
     "request": "^2.81.0",
-    "watson-developer-cloud": "^2.31.1"
   }
 }
