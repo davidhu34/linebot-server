@@ -25,39 +25,44 @@ const echoMsg = event => {
 
 	event.reply(event.message.text)
 		.then( data => {
-			console.log('reply success')
+			console.log('echo success')
 		}).catch( err => {
-			console.log('reply err')
+			console.log('echo err')
 		})
 }
-// reply function
-const replyMsg = (message, profile) => {
-	// profile -> user profile object
-	console.log('reply message:', message)
 
-	let payload = message
-	payload.user = profile.userId
-	request.post({
-		url: 'https://line-red.mybluemix.net/message'
-		body: payload
-	}, (err, res, body) => {
-		if (err) console.log(err)
-		else {
-			console.log(body)
-		/*	const userId = data.message.user
-			const reply = profiles[userId].displayName + ', ' + data.reply.text
-
-			bot.push( userId, {
-				'type': 'text',
-				'text': reply
-			})
-		*/
-		}
-	})
-}
 
 // user profile store
 let profiles = {}
+
+// reply function
+const replyMsg = (message, profile) => {
+	// profile -> user profile object
+	
+	let payload = message
+	payload.user = profile.userId
+	console.log('message:', payload)
+
+	request.post({
+		url: 'https://line-red.mybluemix.net/message',
+		body: JSON.stringify(payload)
+	}, (err, res, body) => {
+		if (err) console.log(err)
+		else {
+			const data = JSON.parse(body)
+			const userId = data.user
+			const name = profiles[userId].displayName
+			const reply = {
+				'type': 'text',
+				'text': name + ', ' + data.text
+			}
+			console.log('rely:', reply)
+			bot.push(userId, reply)
+		}
+	})
+
+}
+
 bot.on('message', event => {
 
 	// echo
