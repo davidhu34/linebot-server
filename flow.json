@@ -53,11 +53,11 @@
         "id": "878ea5d7.c4ee08",
         "type": "function",
         "z": "3a6a4e9b.b46ca2",
-        "name": "",
+        "name": "input text",
         "func": "var m = msg.payload;\nif (m.type === 'text') {\n    node.warn(m.text);\n    msg.payload = m.text;\n    msg.user = m.user;\n    msg.message = m;\n    return msg;\n}\n",
         "outputs": 1,
         "noerr": 0,
-        "x": 123.50003623962402,
+        "x": 133.50003623962402,
         "y": 127.19998073577881,
         "wires": [
             [
@@ -69,11 +69,11 @@
         "id": "2fde5d0b.dfb3a2",
         "type": "function",
         "z": "3a6a4e9b.b46ca2",
-        "name": "",
-        "func": "var output =  msg.payload.output.text[0];\nnode.warn(output);\nmsg.payload = {\n    message: msg.message,\n    reply: {\n        text: output\n    }\n}\nreturn msg;",
+        "name": "ouput text",
+        "func": "var output = msg.payload.output.text[0];\nnode.warn(output);\nmsg.payload = {\n    message: msg.message,\n    reply: {\n        text: output\n    }\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 270.50000190734863,
+        "x": 280.50000190734863,
         "y": 184.20002365112305,
         "wires": [
             [
@@ -262,7 +262,8 @@
         "y": 128.0000033378601,
         "wires": [
             [
-                "e037cae8.2c8508"
+                "e037cae8.2c8508",
+                "2fde5d0b.dfb3a2"
             ]
         ]
     }
