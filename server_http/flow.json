@@ -1,0 +1,116 @@
+[
+    {
+        "id": "d95c53c5.35924",
+        "type": "http in",
+        "z": "796d056c.71187c",
+        "name": "",
+        "url": "/message",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 96.10004806518555,
+        "y": 26.800007820129395,
+        "wires": [
+            [
+                "605753c1.2a133c",
+                "9a9b6af2.49a0b8"
+            ]
+        ]
+    },
+    {
+        "id": "6b15f667.40bd78",
+        "type": "http response",
+        "z": "796d056c.71187c",
+        "name": "",
+        "x": 458.10012435913086,
+        "y": 286.6000096797943,
+        "wires": []
+    },
+    {
+        "id": "605753c1.2a133c",
+        "type": "function",
+        "z": "796d056c.71187c",
+        "name": "conversation input",
+        "func": "var message = JSON.parse(msg.req.body);\nmsg.user = message.user;\nmsg.payload = message.text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 176.1000213623047,
+        "y": 118.00000381469727,
+        "wires": [
+            [
+                "3a7c535f.21fe9c"
+            ]
+        ]
+    },
+    {
+        "id": "3a7c535f.21fe9c",
+        "type": "watson-conversation-v1",
+        "z": "796d056c.71187c",
+        "name": "",
+        "workspaceid": "56a4f9a5-2056-4095-a961-9ff1339c1514",
+        "multiuser": false,
+        "context": true,
+        "default-endpoint": true,
+        "service-endpoint": "https://gateway.watsonplatform.net/conversation/api",
+        "x": 374.1001091003418,
+        "y": 118.00001811981201,
+        "wires": [
+            [
+                "da2d829a.ff191",
+                "c1c60328.314e1"
+            ]
+        ]
+    },
+    {
+        "id": "323bd968.24ead6",
+        "type": "debug",
+        "z": "796d056c.71187c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 462.1001625061035,
+        "y": 223.2000072002411,
+        "wires": []
+    },
+    {
+        "id": "da2d829a.ff191",
+        "type": "function",
+        "z": "796d056c.71187c",
+        "name": "conversation output",
+        "func": "msg.payload = {\n    text: msg.payload.output.text[0],\n    user: msg.user,\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 248.1001205444336,
+        "y": 223.2000072002411,
+        "wires": [
+            [
+                "323bd968.24ead6",
+                "6b15f667.40bd78"
+            ]
+        ]
+    },
+    {
+        "id": "c1c60328.314e1",
+        "type": "debug",
+        "z": "796d056c.71187c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 578.1001167297363,
+        "y": 118.40001773834229,
+        "wires": []
+    },
+    {
+        "id": "9a9b6af2.49a0b8",
+        "type": "debug",
+        "z": "796d056c.71187c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "req.body",
+        "x": 321.10001373291016,
+        "y": 27.20001745223999,
+        "wires": []
+    }
+]
