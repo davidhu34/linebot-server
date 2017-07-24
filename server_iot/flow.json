@@ -1,8 +1,65 @@
 [
     {
-        "id": "7cc0e908.b847c8",
+        "id": "f7a2285.12b40d8",
+        "type": "subflow",
+        "name": "Subflow 1",
+        "info": "",
+        "in": [
+            {
+                "x": 85.71428489685059,
+                "y": 132.85714149475098,
+                "wires": [
+                    {
+                        "id": "d806fb86.f66f78"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 544.2856969833374,
+                "y": 238.57142448425293,
+                "wires": [
+                    {
+                        "id": "d806fb86.f66f78",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "2c328289.b7c54e",
+        "type": "debug",
+        "z": "f7a2285.12b40d8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 474.84127044677734,
+        "y": 147.77777481079102,
+        "wires": []
+    },
+    {
+        "id": "d806fb86.f66f78",
+        "type": "function",
+        "z": "f7a2285.12b40d8",
+        "name": "",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 247.6983871459961,
+        "y": 155.21827697753906,
+        "wires": [
+            [
+                "2c328289.b7c54e"
+            ]
+        ]
+    },
+    {
+        "id": "e632755d.fd6d48",
         "type": "ibmiot in",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "authentication": "boundService",
         "apiKey": "",
         "inputType": "evt",
@@ -16,41 +73,24 @@
         "service": "registered",
         "allDevices": "",
         "allApplications": "",
-        "allDeviceTypes": "",
+        "allDeviceTypes": false,
         "allEvents": false,
         "allCommands": "",
         "allFormats": true,
         "qos": 0,
-        "x": 95.9999942779541,
-        "y": 44.40003204345703,
+        "x": 69,
+        "y": 33.00000476837158,
         "wires": [
             [
-                "7eeeaa99.05f154",
-                "37a463f7.d08fcc"
+                "878ea5d7.c4ee08",
+                "79e10b9d.155ae4"
             ]
         ]
     },
     {
-        "id": "388576db.410e1a",
-        "type": "watson-conversation-v1",
-        "z": "daa52f43.2dec2",
-        "name": "",
-        "workspaceid": "89a67e22-42d8-4f4c-92e5-1481bb641150",
-        "multiuser": true,
-        "context": true,
-        "x": 267.5000114440918,
-        "y": 104.40003967285156,
-        "wires": [
-            [
-                "6dec68d8.c15708",
-                "d7fdcdf6.cc248"
-            ]
-        ]
-    },
-    {
-        "id": "e99844e2.8f7d08",
+        "id": "c4ca0ac2.066af8",
         "type": "ibmiot out",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "authentication": "boundService",
         "apiKey": "",
         "outputType": "cmd",
@@ -62,151 +102,151 @@
         "qos": 0,
         "name": "IBM IoT",
         "service": "registered",
-        "x": 442.5000457763672,
-        "y": 216.80005550384521,
+        "x": 698.4524536132812,
+        "y": 287.9714517593384,
         "wires": []
     },
     {
-        "id": "7eeeaa99.05f154",
+        "id": "878ea5d7.c4ee08",
         "type": "function",
-        "z": "daa52f43.2dec2",
-        "name": "",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "input text",
         "func": "var m = msg.payload;\nif (m.type === 'text') {\n    node.warn(m.text);\n    msg.payload = m.text;\n    msg.user = m.user;\n    msg.message = m;\n    return msg;\n}\n",
         "outputs": 1,
         "noerr": 0,
-        "x": 113.50003051757812,
-        "y": 104.60000896453857,
+        "x": 107.50004577636719,
+        "y": 105.19997978210449,
         "wires": [
             [
-                "388576db.410e1a"
+                "39255b3c.b3e004"
             ]
         ]
     },
     {
-        "id": "6dec68d8.c15708",
+        "id": "2fde5d0b.dfb3a2",
         "type": "function",
-        "z": "daa52f43.2dec2",
-        "name": "",
-        "func": "var output =  msg.payload.output.text[0];\nnode.warn(output);\nmsg.payload = {\n    message: msg.message,\n    reply: {\n        text: output\n    }\n}\nreturn msg;",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "ouput text",
+        "func": "var output = msg.payload.output.text[0];\nnode.warn(output);\nmsg.payload = {\n    message: msg.message,\n    reply: {\n        text: output\n    }\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 260.49999618530273,
-        "y": 161.6000518798828,
+        "x": 534.7857475280762,
+        "y": 247.53335571289062,
         "wires": [
             [
-                "e99844e2.8f7d08",
-                "7f126c10.8667e4"
+                "c4ca0ac2.066af8",
+                "eae8440d.f303f8"
             ]
         ]
     },
     {
-        "id": "37a463f7.d08fcc",
+        "id": "79e10b9d.155ae4",
         "type": "debug",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "active": true,
         "console": "false",
         "complete": "true",
-        "x": 247.50003051757812,
-        "y": 44.400028228759766,
+        "x": 254.50003051757812,
+        "y": 36.00000190734863,
         "wires": []
     },
     {
-        "id": "d7fdcdf6.cc248",
+        "id": "e037cae8.2c8508",
         "type": "debug",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 453.5000534057617,
-        "y": 104.80004596710205,
+        "x": 502.16670989990234,
+        "y": 40.73335552215576,
         "wires": []
     },
     {
-        "id": "81128471.0ec218",
+        "id": "f65d595d.893558",
         "type": "weather_insights",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "10-day forecasts",
         "host": "",
         "service": "/forecast/daily/10day.json",
         "geocode": "0,0",
         "units": "m",
         "language": "zh-TW",
-        "x": 332.2727508544922,
-        "y": 294.90912437438965,
+        "x": 370.6060791015625,
+        "y": 450.84242820739746,
         "wires": [
             [
-                "c9c0cd48.f2bea"
+                "f1def43e.18ed08"
             ]
         ]
     },
     {
-        "id": "c9c0cd48.f2bea",
+        "id": "f1def43e.18ed08",
         "type": "function",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "get tomorrow",
         "func": "msg.payload = msg.forecasts[1];\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 501.3636474609375,
-        "y": 295.09092712402344,
+        "x": 538.0303192138672,
+        "y": 447.6908988952637,
         "wires": [
             [
-                "16711f1c.417ac1"
+                "c0b7ca55.23f398"
             ]
         ]
     },
     {
-        "id": "c5a0da7e.02c6f8",
+        "id": "290b5f57.0bb6c",
         "type": "weather_insights",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "current observations",
         "host": "",
         "service": "/observations.json",
         "geocode": "0,0",
         "units": "m",
         "language": "zh-TW",
-        "x": 349.8182067871094,
-        "y": 333.7272644042969,
+        "x": 394.81819915771484,
+        "y": 551.3272285461426,
         "wires": [
             [
-                "b4ae6611.dcf3c8"
+                "be04a6ea.c08b78"
             ]
         ]
     },
     {
-        "id": "b4ae6611.dcf3c8",
+        "id": "be04a6ea.c08b78",
         "type": "function",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "observation",
         "func": "msg.payload = msg.observation;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 535.1817855834961,
-        "y": 335.0909128189087,
+        "x": 588.5151290893555,
+        "y": 529.3575773239136,
         "wires": [
             [
-                "bf7cdef4.8bca7"
+                "ed3ed846.d4a4a8"
             ]
         ]
     },
     {
-        "id": "bf7cdef4.8bca7",
+        "id": "ed3ed846.d4a4a8",
         "type": "debug",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 695.8181991577148,
-        "y": 335.27274894714355,
+        "x": 732.4848785400391,
+        "y": 437.8727207183838,
         "wires": []
     },
     {
-        "id": "f867d143.0dec5",
+        "id": "3d2a4825.43f688",
         "type": "inject",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "topic": "",
         "payload": "25.033493,121.564101",
@@ -214,18 +254,18 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 131.90911865234375,
-        "y": 333.2726993560791,
+        "x": 120.24246215820312,
+        "y": 547.5393333435059,
         "wires": [
             [
-                "c5a0da7e.02c6f8"
+                "290b5f57.0bb6c"
             ]
         ]
     },
     {
-        "id": "da1e4197.5c0a6",
+        "id": "d2c8cef8.a6f0f",
         "type": "inject",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "topic": "",
         "payload": "25.033493,121.564101",
@@ -234,35 +274,186 @@
         "crontab": "",
         "once": false,
         "x": 132.3636474609375,
-        "y": 295.2727241516113,
+        "y": 456.20598793029785,
         "wires": [
             [
-                "81128471.0ec218"
+                "f65d595d.893558"
             ]
         ]
     },
     {
-        "id": "16711f1c.417ac1",
+        "id": "c0b7ca55.23f398",
         "type": "debug",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 662.2726879119873,
-        "y": 294.9091033935547,
+        "x": 693.939338684082,
+        "y": 387.5090570449829,
         "wires": []
     },
     {
-        "id": "7f126c10.8667e4",
+        "id": "eae8440d.f303f8",
         "type": "debug",
-        "z": "daa52f43.2dec2",
+        "z": "3a6a4e9b.b46ca2",
         "name": "",
         "active": true,
         "console": "false",
         "complete": "true",
-        "x": 432.4999694824219,
-        "y": 162.20000648498535,
+        "x": 772.2619323730469,
+        "y": 199.0856876373291,
         "wires": []
+    },
+    {
+        "id": "39255b3c.b3e004",
+        "type": "watson-conversation-v1",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "workspaceid": "24402f1a-e0e2-437b-9f58-5e88e3024797",
+        "multiuser": true,
+        "context": true,
+        "default-endpoint": true,
+        "service-endpoint": "https://gateway.watsonplatform.net/conversation/api",
+        "x": 265.1000061035156,
+        "y": 107.00000190734863,
+        "wires": [
+            [
+                "e037cae8.2c8508",
+                "dbeb4d8a.7e48e"
+            ]
+        ]
+    },
+    {
+        "id": "24b676fa.8dfb4a",
+        "type": "http request",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "https://tw.rter.info/capi.php",
+        "tls": "",
+        "x": 248.10317993164062,
+        "y": 254.34921646118164,
+        "wires": [
+            [
+                "66b09b30.c01ec4"
+            ]
+        ]
+    },
+    {
+        "id": "747a9efa.f008f",
+        "type": "inject",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 98.38888549804688,
+        "y": 181.55558586120605,
+        "wires": [
+            [
+                "24b676fa.8dfb4a"
+            ]
+        ]
+    },
+    {
+        "id": "1c04bdd8.c16aa2",
+        "type": "debug",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload.USDTWD.Exrate",
+        "x": 469.5317077636719,
+        "y": 387.3333225250244,
+        "wires": []
+    },
+    {
+        "id": "66b09b30.c01ec4",
+        "type": "json",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "x": 255.00794982910156,
+        "y": 328.04760932922363,
+        "wires": [
+            [
+                "1c04bdd8.c16aa2",
+                "fc839ca5.1e17c"
+            ]
+        ]
+    },
+    {
+        "id": "dbeb4d8a.7e48e",
+        "type": "switch",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "property": "payload.intents[0].intent",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "exchange",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 428.50528717041016,
+        "y": 124.7354507446289,
+        "wires": [
+            [
+                "24b676fa.8dfb4a"
+            ],
+            [
+                "2fde5d0b.dfb3a2"
+            ]
+        ]
+    },
+    {
+        "id": "fc839ca5.1e17c",
+        "type": "function",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "func": "var rate = msg.payload.USDTWD.Exrate;\n//var output = msg.payload.output.text[0];\nnode.warn(rate);\nmsg.payload = {\n    message: msg.message,\n    reply: {\n        text: rate\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 499.1270294189453,
+        "y": 333.174617767334,
+        "wires": [
+            [
+                "c4ca0ac2.066af8",
+                "12771f3e.8abb31"
+            ]
+        ]
+    },
+    {
+        "id": "12771f3e.8abb31",
+        "type": "debug",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 807.6984514508928,
+        "y": 344.92065429687494,
+        "wires": []
+    },
+    {
+        "id": "bb2f216c.fdd6d",
+        "type": "subflow:f7a2285.12b40d8",
+        "z": "3a6a4e9b.b46ca2",
+        "name": "",
+        "x": 683.4127371651786,
+        "y": 134.44444928850444,
+        "wires": [
+            []
+        ]
     }
 ]
